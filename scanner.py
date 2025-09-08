@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: <2025-09-08 23:08:04 krylon>
+# Time-stamp: <2025-09-08 23:18:25 krylon>
 #
 # /data/code/python/cleantags/scanner.py
 # created on 08. 09. 2025
@@ -43,12 +43,14 @@ class Scanner:
 
     def visit_folder(self) -> None:
         """Visit the directory tree and scan for audio files."""
+        self.log.info("Visit %s", self.path)
         for root, _folders, files in os.walk(self.path):
             for f in files:
                 m = audioPat.search(f)
                 if m is not None:
                     full_path = os.path.join(root, f)
                     self.fileQ.put(full_path)
+        self.fileQ.shutdown()
 
 # Local Variables: #
 # python-indent: 4 #

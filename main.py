@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: <2025-09-08 23:07:54 krylon>
+# Time-stamp: <2025-09-08 23:20:27 krylon>
 #
 # /data/code/python/cleantags/main.py
 # created on 08. 09. 2025
@@ -18,9 +18,11 @@ cleantags.main
 
 
 import argparse
+import logging
 from queue import Queue
 from threading import Thread
 
+from cleantags import common
 from cleantags.scanner import Scanner
 
 
@@ -32,16 +34,24 @@ def main() -> None:
     args = argp.parse_args()
 
     sc: Scanner = Scanner(args.path)
-    worker = Thread(target=handle_files, args=(sc.fileQ, ), daemon=True)
+    worker = Thread(target=handle_files, args=(sc.fileQ, ), daemon=False)
     worker.start()
     sc.visit_folder()
 
 
 def handle_files(q: Queue) -> None:
     """Process the files discovered by the Scanner."""
-    while True:
-        f: str = q.get()
-        print(f)
+    try:
+        log: logging.Logger = common.get_logger("main")
+        while not q.is_shutdown:
+            f: str = q.get()
+            log.debug("Found file %s", f)
+    finally:
+        log.debug("File handler is done. Toodles!")
+
+
+if __name__ == '__main__':
+    main()
 
 # Local Variables: #
 # python-indent: 4 #
