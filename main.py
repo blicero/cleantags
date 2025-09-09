@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: <2025-09-08 23:20:27 krylon>
+# Time-stamp: <2025-09-09 15:00:28 krylon>
 #
 # /data/code/python/cleantags/main.py
 # created on 08. 09. 2025
@@ -24,17 +24,20 @@ from threading import Thread
 
 from cleantags import common
 from cleantags.scanner import Scanner
+from cleantags.tag import Tagger
 
 
 def main() -> None:
     """Run our humble application."""
     argp: argparse.ArgumentParser = argparse.ArgumentParser()
     argp.add_argument("-p", "--path", help="The path to scan for audio files")
+    argp.add_argument("-n", "--dry-run", help="Dry run, do not modify any files")
 
     args = argp.parse_args()
 
     sc: Scanner = Scanner(args.path)
-    worker = Thread(target=handle_files, args=(sc.fileQ, ), daemon=False)
+    t: Tagger = Tagger(sc.fileQ, args.dry_run)
+    worker = Thread(target=t.process_files, daemon=True)
     worker.start()
     sc.visit_folder()
 
