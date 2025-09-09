@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: <2025-09-09 15:04:34 krylon>
+# Time-stamp: <2025-09-09 16:17:27 krylon>
 #
 # /data/code/python/cleantags/tag.py
 # created on 08. 09. 2025
@@ -52,7 +52,7 @@ class Tagger:
     dryRun: bool
     queue: Queue
 
-    def __init__(self, q: Queue, dryRun: bool = False) -> None:
+    def __init__(self, q: Queue, dryRun: bool = True) -> None:
         self.log = common.get_logger("tag")
         self.queue = q
         self.dryRun = dryRun

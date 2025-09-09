@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: <2025-09-09 15:00:28 krylon>
+# Time-stamp: <2025-09-09 16:21:10 krylon>
 #
 # /data/code/python/cleantags/main.py
 # created on 08. 09. 2025
@@ -31,7 +31,10 @@ def main() -> None:
     """Run our humble application."""
     argp: argparse.ArgumentParser = argparse.ArgumentParser()
     argp.add_argument("-p", "--path", help="The path to scan for audio files")
-    argp.add_argument("-n", "--dry-run", help="Dry run, do not modify any files")
+    argp.add_argument("-n", "--dry-run",
+                      action="store_true",
+                      default=True,
+                      help="Dry run, do not modify any files")
 
     args = argp.parse_args()
 
